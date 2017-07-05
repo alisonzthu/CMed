@@ -1,3 +1,19 @@
+.loader {
+    border: 1rem solid #f3f3f3;
+    border-top: 1rem solid #3498db;
+    border-radius: 50%;
+    width: 6rem;
+    height: 6rem;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    margin-top: 5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .tableName {
   text-align: center;
   font-size: 1.5rem;
@@ -8,7 +24,6 @@
   width: 100%;
 }
 thead th {
-  /*display: block;*/
   background-color: lightblue;
   width: 15%;
   padding: 0.4rem 0;
@@ -98,8 +113,9 @@ footer {
     border: none;
     border-bottom: 1px solid #eee;
     position: relative;
-    padding: 0.4rem 0;
+    padding: 0.4rem;
     padding-left: 30%;
+    text-align: right;
   }
 
   td:before {
@@ -121,8 +137,19 @@ footer {
   td:nth-of-type(6):before {content: 'Agency';}
   td:nth-of-type(7):before {content: 'UDI';}
 
-  .UDItip {
-    left: 60%;
+  .UDIContainer {
+    text-align: right;
   }
 
+  .UDIContainer .UDItip {
+    left: 80%;
+  }
 }
+
+@media only screen and (max-width: 560px) {
+  
+  .UDIContainer .UDItip {
+    left: 68%;
+  }
+}
+
