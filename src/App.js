@@ -13,7 +13,7 @@ class App extends Component {
   componentDidMount() {
     //this is our 3 udi strings. The second one needs percent-encoding to parse '+' to '%2B' to let the API consider it as a valid string
     const qstrings = [
-    {'agency': 'GS1 Issuing Angency', 
+    {'agency': 'GS1 Issuing Agency', 
      'udi': '(01)10884521062856(11)141231(17)150707(10)A213B1(21)1234'}, 
     {'agency': 'HIBCC',
      'udi': '%2BB066000325011NS1/$$420020216LOT123456789012345/SXYZ456789012345678/16D20130202C1'}, 
@@ -27,7 +27,7 @@ class App extends Component {
 
         const transit = {agency: qstring.agency, udi: qstring.udi};
         for (var pair of response.headers.entries()) {
-          console.log(pair[0] + ': ' + pair[1]);
+          // console.log(pair[0] + ': ' + pair[1]);
           switch(pair[0]) {
             case 'lot_number':
               transit[pair[0]] = pair[1];
@@ -66,6 +66,7 @@ class App extends Component {
         <table className="dataTable">
           <thead>
             <tr>
+              <th>No.</th>
               <th>Lot Number</th>
               <th>Serial Number</th>
               <th>Expiration Date</th>
@@ -76,10 +77,11 @@ class App extends Component {
           </thead>
           <tbody>
             {this.state.gudids.map((gudid, index) => 
-              <TableEntry key={index} agency={gudid.agency} expiration_date={gudid.expiration_date} lot_number={gudid.lot_number} manufacturing_date={gudid.manufacturing_date} serial_number={gudid.serial_number} UDI={gudid.udi}/>
+              <TableEntry key={index} No={index} agency={gudid.agency} expiration_date={gudid.expiration_date} lot_number={gudid.lot_number} manufacturing_date={gudid.manufacturing_date} serial_number={gudid.serial_number} UDI={gudid.udi}/>
             )}
           </tbody>
         </table>
+        <footer>&#169; Alison Zhang</footer>
       </div>
     );
   }
