@@ -67,7 +67,7 @@ class App extends Component {
     }
     return (
       <div>
-        <div className="tableName">Device Lookup Results</div>
+        <header className="tableName">Device Lookup Results</header>
         <table className="dataTable">
           <thead>
             <TableHead />
