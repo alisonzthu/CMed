@@ -11,8 +11,9 @@ const TableEntry = ({agency, expiration_date, lot_number='N/A', manufacturing_da
       <td>{expiration_date}</td>
       <td>{manufacturing_date}</td>
       <td>{agency}</td>
-      <td className="udiNumber"><a className="seeUDI">see UDI</a></td>
-
+      <td className="udiNumber" title={UDI}>
+        <a className="seeUDI">Hover to see UDI</a>
+      </td>
     </tr>)
 };
 

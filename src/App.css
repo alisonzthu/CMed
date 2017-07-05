@@ -1,6 +1,7 @@
 .tableName {
   text-align: center;
   font-size: 1.5rem;
+  font-weight: bold;
 }
 .dataTable {
   width: 100%;
@@ -25,6 +26,7 @@ table td {
   text-decoration: underline;
   cursor: pointer;
 }
+
 
 /*.App {
   text-align: center;
