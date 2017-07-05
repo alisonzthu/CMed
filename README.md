@@ -1,9 +1,9 @@
 This project is bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 ## Usage
- npm install
- npm start
- open your browser and check on localhost:3000
+ 1. npm install
+ 2. npm start
+ 3. open your browser and check on localhost:3000
 
 ## Project Development Summary
 
