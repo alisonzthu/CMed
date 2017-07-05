@@ -18,26 +18,13 @@ class App extends Component {
     Promise.all(qstrings.map((qstring, index) => 
       fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${qstring.udi}`)
       .then(response => {
+
         const transit = Object.assign({}, qstring);
-        //extract only the data we need for display:
-        for (var pair of response.headers.entries()) {
-          switch(pair[0]) {
-            case 'lot_number':
-              transit[pair[0]] = pair[1];
-              break;
-            case 'serial_number':
-              transit[pair[0]] = pair[1];
-              break;
-            case 'expiration_date':
-              transit[pair[0]] = pair[1];
-              break;
-            case 'manufacturing_date':
-              transit[pair[0]] = pair[1];
-              break;
-            default:
-              break;
-          }
-        }
+        transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
+        transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
+        transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
+        transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
+
         data[index] = transit;
       })))
       .catch(err => {
