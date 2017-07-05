@@ -2,6 +2,30 @@
   text-align: center;
   font-size: 1.5rem;
 }
+.dataTable {
+  width: 100%;
+}
+thead th {
+  /*display: block;*/
+  background-color: lightblue;
+  width: 15%;
+  padding: 0.4rem 0;
+}
+table td {
+  text-align: center;
+  padding: 0.2rem 0;
+}
+
+.udiNumber {
+  text-align: center;
+}
+
+.seeUDI{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /*.App {
   text-align: center;
 }

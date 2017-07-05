@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DataEntry from './DataEntry.js';
+import TableEntry from './TableEntry.js';
 import './App.css';
 
 class App extends Component {
@@ -62,21 +62,21 @@ class App extends Component {
     console.log(this.state.gudids);
     return (
       <div>
-        <header className="tableName">Hello Alison</header>
+        <div className="tableName">Device Lookup Results</div>
         <table className="dataTable">
           <thead>
             <tr>
-              <th>Agency</th>
-              <th>Expiration Date</th>
               <th>Lot Number</th>
-              <th>Manufacturing Date</th>
               <th>Serial Number</th>
+              <th>Expiration Date</th>
+              <th>Manufacturing Date</th>
+              <th>Agency</th>
               <th>UDI</th>
             </tr>
           </thead>
           <tbody>
             {this.state.gudids.map((gudid, index) => 
-              <DataEntry key={index} agency={gudid.agency} expiration_date={gudid.expiration_date} lot_number={gudid.lot_number} manufacturing_date={gudid.manufacturing_date} serial_number={gudid.serial_number} UDI={gudid.udi}/>
+              <TableEntry key={index} agency={gudid.agency} expiration_date={gudid.expiration_date} lot_number={gudid.lot_number} manufacturing_date={gudid.manufacturing_date} serial_number={gudid.serial_number} UDI={gudid.udi}/>
             )}
           </tbody>
         </table>
