@@ -8,7 +8,6 @@ const TableHead = () => {
       <th>Serial Number</th>
       <th>Expiration Date</th>
       <th>Manufacturing Date</th>
-      <th>Agency</th>
       <th>UDI</th>
     </tr>
   );

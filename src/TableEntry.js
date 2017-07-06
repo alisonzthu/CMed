@@ -14,7 +14,6 @@ const TableEntry = ({No, agency='N/A', expiration_date='N/A', lot_number='N/A', 
       <td>{serial_number}</td>
       <td>{expiration_date}</td>
       <td>{manufacturing_date}</td>
-      <td>{agency}</td>
       <td className="UDIContainer" data-udi={UDI}>
         <a className="seeUDI">Hover to see UDI</a>
         <span className="UDItip" onClick={handleClick}>{UDI}</span>

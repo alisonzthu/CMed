@@ -10,6 +10,7 @@ class App extends Component {
     this.state = {
       gudids: []
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -47,26 +48,31 @@ class App extends Component {
     window.removeEventListener('touchend', touchUDIHandler);
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    console.log(e.target);
-    const udi = e.target.previousSibling.value;
-    const validUDI = encodeURIComponent(udi);
-    console.log(validUDI);
-    fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${validUDI}`)
+  _fetchData(udis, context) {
+    fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${udis}`)
     .then(response => {
 
-      const transit = Object.assign({}, qstring);
+      const transit = Object.assign({}, {udi: udis});
       transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
       transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
       transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
       transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
 
-      data[index] = transit;
+      console.log('transit: ', transit);
+      console.log('state:', context.state);
+      context.setState({gudids: context.state.gudids.concat(transit)});
     })
     .catch(err => {
       console.error('uh')
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const udi = e.target.previousSibling.value;
+    const validUDI = encodeURIComponent(udi);
+    this._fetchData(validUDI, this);
+    e.target.previousSibling.value = '';
   }
 
   render() {
