@@ -87,8 +87,50 @@ table td {
   opacity: 1;
 }
 
+.form {
+  position: relative;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.badUDIReminder, .repeatUDI {
+  visibility: hidden;
+  background-color: #f7a894;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: 38%;
+  padding: 0.4rem;
+}
+
+.badUDIReminder.show, .repeatUDI.show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+input[type=text] {
+  font-size: 1rem;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+input[type=submit] {
+  margin-left: 1rem;
+  background-color: #abeaae;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+}
+
 footer {
-  margin-top: 1rem;
+  margin-top: 1.5rem; 
   text-align: center;
   color: #ddd;
   font-size: 0.8rem;

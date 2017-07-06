@@ -14,30 +14,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const data = new Array(qstrings.length);
-    // use Promise.all to get all 3 piecies of data we need for display
-    Promise.all(qstrings.map((qstring, index) => 
-      fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${qstring.udi}`)
-      .then(response => {
-
-        const transit = Object.assign({}, qstring);
-        transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
-        transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
-        transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
-        transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
-
-        data[index] = transit;
-      })))
-      .catch(err => {
-        throw new UserException('Fetch data error');
-      })
-    .then(()=> {
-      this.setState({gudids: data});
-    })
-    .catch(err => {
-      console.log('Error: ', err.message);
-    });
-
+    this._fetchData(qstrings, this);
     window.addEventListener('touchend', touchNonUDIHandle);
     window.addEventListener('touchend',touchUDIHandler);
   }
@@ -49,29 +26,51 @@ class App extends Component {
   }
 
   _fetchData(udis, context) {
-    fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${udis}`)
-    .then(response => {
+    udis.forEach(udi => {
+      fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${udi}`)
+      .then(response => {
 
-      const transit = Object.assign({}, {udi: udis});
-      transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
-      transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
-      transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
-      transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
+        if (!response.ok) {
+          throw new Error('Please double check your UDI');
+        }
 
-      console.log('transit: ', transit);
-      console.log('state:', context.state);
-      context.setState({gudids: context.state.gudids.concat(transit)});
-    })
-    .catch(err => {
-      console.error('uh')
+        const transit = Object.assign({}, {udi: udi});
+        //checking null here is to have the TableEntry default values to work
+        transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
+        transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
+        transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
+        transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
+
+        context.setState({gudids: context.state.gudids.concat(transit)});
+        
+
+      })
+      .catch(err => {
+        //refactor later:!!
+        if (err.message === 'Please double check your UDI') {
+          const badUDIReminder = document.querySelector('.badUDIReminder');
+          badUDIReminder.classList.add('show');
+        } else {
+          console.error('Error: ', err.message);
+        }
+      });
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    document.querySelector('.repeatUDI').classList.remove('show');
+    document.querySelector('.badUDIReminder').classList.remove('show');
     const udi = e.target.previousSibling.value;
+    //it'd be better to add a purifier here to purify the udi, thus preventing client side injection
     const validUDI = encodeURIComponent(udi);
-    this._fetchData(validUDI, this);
+    // check if there's repeat UDI: 
+    const udiExists = this.state.gudids.some((gudid) => gudid.udi === udi || gudid.udi === validUDI);
+    if (udiExists) {
+      document.querySelector('.repeatUDI').classList.add('show');
+    } else {
+      this._fetchData([validUDI], this);
+    }
     e.target.previousSibling.value = '';
   }
 
@@ -94,19 +93,16 @@ class App extends Component {
           </tbody>
         </table>
         <div className="form">
-          <input type="text"/>
+          <input type="text" className="UDIInput"/>
           <input type="submit" value="Submit" onClick={this.handleSubmit}/>
+          <span className="badUDIReminder">Please double check your UDI</span>
+          <span className="repeatUDI">Device with the same UDI exists in the table</span>
         </div>
         <footer>&#169; Alison Zhang</footer>
       </div>
     );
   }
 }
-
-const UserException = (message) => {
-  this.message = message;
-  this.name = 'UserException';
-};
 
 const touchNonUDIHandle = (e) => {
   const udiTags = Array.prototype.slice.call(document.querySelectorAll('.seeUDI'));
