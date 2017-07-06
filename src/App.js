@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TableEntry from './TableEntry.js';
 import TableHead from './TableHead.js';
+import UserInputForm from './UserInputForm.js';
 import qstrings from './inputData.js';
 import './App.css';
 
@@ -43,10 +44,8 @@ class App extends Component {
 
         context.setState({gudids: context.state.gudids.concat(transit)});
         
-
       })
       .catch(err => {
-        //refactor later:!!
         if (err.message === 'Please double check your UDI') {
           const badUDIReminder = document.querySelector('.badUDIReminder');
           badUDIReminder.classList.add('show');
@@ -92,12 +91,7 @@ class App extends Component {
             )}
           </tbody>
         </table>
-        <div className="form">
-          <input type="text" className="UDIInput"/>
-          <input type="submit" value="Submit" onClick={this.handleSubmit}/>
-          <span className="badUDIReminder">Please double check your UDI</span>
-          <span className="repeatUDI">Device with the same UDI exists in the table</span>
-        </div>
+        <UserInputForm handleSubmit={this.handleSubmit} />
         <footer>&#169; Alison Zhang</footer>
       </div>
     );
