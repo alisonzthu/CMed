@@ -47,6 +47,28 @@ class App extends Component {
     window.removeEventListener('touchend', touchUDIHandler);
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(e.target);
+    const udi = e.target.previousSibling.value;
+    const validUDI = encodeURIComponent(udi);
+    console.log(validUDI);
+    fetch(`https://accessgudid.nlm.nih.gov/api/v1/devices/lookup.json?udi=${validUDI}`)
+    .then(response => {
+
+      const transit = Object.assign({}, qstring);
+      transit.lot_number = response.headers.get('lot_number') === null ? undefined : response.headers.get('lot_number');
+      transit.serial_number = response.headers.get('serial_number') === null ? undefined : response.headers.get('serial_number');
+      transit.expiration_date = response.headers.get('expiration_date') === null ? undefined : response.headers.get('expiration_date');
+      transit.manufacturing_date = response.headers.get('manufacturing_date') === null ? undefined: response.headers.get('manufacturing_date');
+
+      data[index] = transit;
+    })
+    .catch(err => {
+      console.error('uh')
+    });
+  }
+
   render() {
     if (this.state.gudids.length === 0) {
       return (
@@ -65,6 +87,10 @@ class App extends Component {
             )}
           </tbody>
         </table>
+        <div className="form">
+          <input type="text"/>
+          <input type="submit" value="Submit" onClick={this.handleSubmit}/>
+        </div>
         <footer>&#169; Alison Zhang</footer>
       </div>
     );
